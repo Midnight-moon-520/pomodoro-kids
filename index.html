@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="番茄钟">
+    <meta name="theme-color" content="#4A90D9">
+    <meta name="description" content="儿童学习番茄钟 - 帮助小朋友专注学习">
+    <title>🍅 番茄钟</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="app-header">
+        <h1 class="app-title">🍅 番茄钟</h1>
+        <div class="header-actions">
+            <button class="icon-btn" id="themeToggle" aria-label="切换主题" title="切换深色/浅色模式">
+                <span class="icon">🌙</span>
+            </button>
+            <button class="icon-btn" id="settingsBtn" aria-label="设置" title="设置">
+                <span class="icon">⚙️</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 专注等级横幅 -->
+    <div class="streak-banner" id="streakBanner">
+        <div class="streak-info">
+            <span class="streak-fire">🔥</span>
+            <span class="streak-text">连续学习 <strong id="streakDays">0</strong> 天</span>
+        </div>
+        <div class="level-info">
+            <span class="level-badge" id="levelBadge">🌱 新手</span>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <main class="app-main">
+        <!-- 番茄钟页面 -->
+        <section class="page active" id="pagePomodoro">
+            <div class="timer-container">
+                <!-- 圆形进度环 -->
+                <div class="timer-ring-container">
+                    <svg class="timer-ring" viewBox="0 0 200 200">
+                        <circle class="timer-ring-bg" cx="100" cy="100" r="90" />
+                        <circle class="timer-ring-progress" cx="100" cy="100" r="90"
+                                id="timerRingProgress" stroke-dasharray="565.49" stroke-dashoffset="0" />
+                    </svg>
+                    <div class="timer-display">
+                        <span class="timer-minutes" id="pomodoroMinutes">25</span>
+                        <span class="timer-separator">:</span>
+                        <span class="timer-seconds" id="pomodoroSeconds">00</span>
+                    </div>
+                </div>
+
+                <!-- 模式切换 -->
+                <div class="mode-switch">
+                    <button class="mode-btn active" data-mode="focus" id="modeFocus">📖 学习</button>
+                    <button class="mode-btn" data-mode="break" id="modeBreak">☕ 休息</button>
+                </div>
+
+                <!-- 控制按钮 -->
+                <div class="timer-controls">
+                    <button class="control-btn primary" id="btnStartPause">
+                        <span class="btn-icon">▶️</span>
+                        <span class="btn-text">开始</span>
+                    </button>
+                    <button class="control-btn" id="btnReset">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">重置</span>
+                    </button>
+                </div>
+
+                <!-- 今日统计 -->
+                <div class="today-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">🍅</span>
+                        <span class="stat-value" id="todayPomodoros">0</span>
+                        <span class="stat-label">今日番茄</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">⏱️</span>
+                        <span class="stat-value" id="todayMinutes">0</span>
+                        <span class="stat-label">今日分钟</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 计时器页面 -->
+        <section class="page" id="pageTimer">
+            <div class="timer-container">
+                <!-- 时间设置 -->
+                <div class="time-setter">
+                    <div class="time-input-group">
+                        <button class="time-adjust" data-target="timerMin" data-action="up">▲</button>
+                        <div class="time-input-display">
+                            <span class="time-value" id="timerMinDisplay">05</span>
+                            <span class="time-label">分</span>
+                        </div>
+                        <button class="time-adjust" data-target="timerMin" data-action="down">▼</button>
+                    </div>
+                    <span class="time-setter-sep">:</span>
+                    <div class="time-input-group">
+                        <button class="time-adjust" data-target="timerSec" data-action="up">▲</button>
+                        <div class="time-input-display">
+                            <span class="time-value" id="timerSecDisplay">00</span>
+                            <span class="time-label">秒</span>
+                        </div>
+                        <button class="time-adjust" data-target="timerSec" data-action="down">▼</button>
+                    </div>
+                </div>
+
+                <!-- 计时模板 -->
+                <div class="timer-presets">
+                    <span class="presets-label">快速设置：</span>
+                    <button class="preset-btn" data-min="5" data-sec="0">5分钟</button>
+                    <button class="preset-btn" data-min="15" data-sec="0">15分钟</button>
+                    <button class="preset-btn" data-min="30" data-sec="0">30分钟</button>
+                    <button class="preset-btn" data-min="45" data-sec="0">45分钟</button>
+                    <button class="preset-btn" data-min="60" data-sec="0">60分钟</button>
+                </div>
+
+                <!-- 倒计时显示 -->
+                <div class="countdown-display" id="timerCountdown">
+                    <span class="cd-minutes" id="timerCDMinutes">05</span>
+                    <span class="cd-separator">:</span>
+                    <span class="cd-seconds" id="timerCDSeconds">00</span>
+                </div>
+
+                <!-- 控制按钮 -->
+                <div class="timer-controls">
+                    <button class="control-btn primary" id="btnTimerStart">
+                        <span class="btn-icon">▶️</span>
+                        <span class="btn-text">开始计时</span>
+                    </button>
+                    <button class="control-btn" id="btnTimerReset">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">重置</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 学习记录页面 -->
+        <section class="page" id="pageRecords">
+            <div class="records-container">
+                <!-- 概览卡片 -->
+                <div class="records-overview">
+                    <div class="overview-card">
+                        <div class="overview-icon">📅</div>
+                        <div class="overview-value" id="recordTodayPomodoros">0</div>
+                        <div class="overview-label">今日番茄</div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="overview-icon">📊</div>
+                        <div class="overview-value" id="recordTotalPomodoros">0</div>
+                        <div class="overview-label">总计番茄</div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="overview-icon">🔥</div>
+                        <div class="overview-value" id="recordStreakDays">0</div>
+                        <div class="overview-label">连续天数</div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="overview-icon">⭐</div>
+                        <div class="overview-value" id="recordLevel">🌱</div>
+                        <div class="overview-label">专注等级</div>
+                    </div>
+                </div>
+
+                <!-- 本周热力图 -->
+                <div class="weekly-heatmap" id="weeklyHeatmap">
+                    <h3 class="section-title">📅 本周学习</h3>
+                    <div class="heatmap-grid" id="heatmapGrid"></div>
+                </div>
+
+                <!-- 每日记录列表 -->
+                <div class="daily-records">
+                    <h3 class="section-title">📋 最近记录</h3>
+                    <div class="records-list" id="recordsList">
+                        <p class="records-empty">还没有学习记录哦，加油！💪</p>
+                    </div>
+                </div>
+
+                <button class="clear-btn" id="btnClearRecords">清除所有记录</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- 底部导航 -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-page="pagePomodoro">
+            <span class="nav-icon">🍅</span>
+            <span class="nav-label">番茄钟</span>
+        </button>
+        <button class="nav-btn" data-page="pageTimer">
+            <span class="nav-icon">⏲️</span>
+            <span class="nav-label">计时器</span>
+        </button>
+        <button class="nav-btn" data-page="pageRecords">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">记录</span>
+        </button>
+    </nav>
+
+    <!-- 设置弹窗 -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ 设置</h2>
+                <button class="modal-close" id="closeSettings">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label class="setting-label">📖 学习时长（分钟）</label>
+                    <input type="range" class="setting-range" id="settingFocusTime"
+                           min="5" max="60" value="25" step="5">
+                    <span class="setting-value" id="settingFocusValue">25</span>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">☕ 休息时长（分钟）</label>
+                    <input type="range" class="setting-range" id="settingBreakTime"
+                           min="1" max="30" value="5" step="1">
+                    <span class="setting-value" id="settingBreakValue">5</span>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">🔊 提示音量</label>
+                    <input type="range" class="setting-range" id="settingVolume"
+                           min="0" max="100" value="80" step="10">
+                    <span class="setting-value" id="settingVolumeValue">80%</span>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">📳 振动提醒</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="settingVibrate" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 完成动画覆盖层 -->
+    <div class="celebration-overlay" id="celebrationOverlay">
+        <div class="celebration-content">
+            <div class="celebration-emoji" id="celebrationEmoji">🎉</div>
+            <div class="celebration-text" id="celebrationText">太棒了！</div>
+            <div class="celebration-sub" id="celebrationSub">你完成了一个番茄钟！</div>
+            <button class="celebration-btn" id="celebrationDismiss">👍 继续加油</button>
+        </div>
+        <div class="confetti-container" id="confettiContainer"></div>
+    </div>
+
+    <!-- 安装提示 -->
+    <div class="install-banner" id="installBanner">
+        <span>📲 安装到主屏幕，像App一样使用</span>
+        <button class="install-btn" id="installBtn">安装</button>
+        <button class="install-close" id="installClose">✕</button>
+    </div>
+
+    <script src="js/audio.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
