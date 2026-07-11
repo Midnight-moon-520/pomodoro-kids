@@ -1222,38 +1222,101 @@ body {
     }
 }
 
+/* 中等屏幕 */
+@media (min-width: 481px) and (max-width: 767px) {
+    .app-main {
+        padding: 16px 20px;
+        padding-bottom: calc(100px + var(--safe-bottom));
+    }
+
+    .timer-ring-container {
+        width: min(55vw, 240px);
+        height: min(55vw, 240px);
+    }
+
+    .timer-minutes,
+    .timer-seconds {
+        font-size: 44px;
+    }
+
+    .records-overview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .mode-btn {
+        padding: 12px 24px;
+    }
+
+    .control-btn {
+        padding: 16px 28px;
+    }
+}
+
 /* 手机适配 */
 @media (max-width: 480px) {
-    .app-main {
-        padding: 12px 12px;
-        padding-bottom: calc(90px + var(--safe-bottom));
+    .app-header {
+        padding: 10px 16px;
+        padding-top: calc(10px + var(--safe-top));
     }
 
     .app-title {
         font-size: var(--font-size-lg);
     }
 
+    .app-main {
+        padding: 10px 12px;
+        padding-bottom: calc(90px + var(--safe-bottom));
+    }
+
+    .mode-switch {
+        width: 100%;
+    }
+
     .mode-btn {
-        padding: 10px 20px;
+        flex: 1;
+        padding: 10px 16px;
         font-size: var(--font-size-sm);
+        text-align: center;
+    }
+
+    .timer-controls {
+        gap: 12px;
     }
 
     .control-btn {
-        padding: 14px 24px;
+        padding: 14px 20px;
+        min-width: 90px;
+    }
+
+    .control-btn.primary {
+        min-width: 110px;
     }
 
     .timer-ring-container {
-        width: 220px;
-        height: 220px;
+        width: min(60vw, 200px);
+        height: min(60vw, 200px);
     }
 
     .timer-minutes,
     .timer-seconds {
-        font-size: 40px;
+        font-size: 38px;
     }
 
     .records-overview {
         grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .overview-card {
+        padding: 14px 8px;
+    }
+
+    .overview-icon {
+        font-size: 24px;
+    }
+
+    .overview-value {
+        font-size: var(--font-size-lg);
     }
 
     .time-adjust {
@@ -1267,6 +1330,121 @@ body {
 
     .cd-minutes,
     .cd-seconds {
-        font-size: 56px;
+        font-size: 48px;
+    }
+
+    .countdown-display {
+        padding: 20px;
+        min-width: 180px;
+    }
+
+    .time-setter {
+        gap: 10px;
+    }
+
+    .timer-presets {
+        gap: 6px;
+    }
+
+    .preset-btn {
+        padding: 6px 12px;
+        font-size: var(--font-size-xs);
+    }
+
+    .bottom-nav {
+        padding: 6px 8px;
+        padding-bottom: calc(6px + var(--safe-bottom));
+    }
+
+    .nav-btn {
+        padding: 6px 4px;
+    }
+
+    .nav-btn .nav-icon {
+        font-size: 20px;
+    }
+
+    .modal-content {
+        margin: 12px;
+        padding: 20px;
+    }
+
+    .setting-group {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .setting-label {
+        min-width: 120px;
+        font-size: var(--font-size-sm);
+    }
+
+    .celebration-content {
+        padding: 28px 20px;
+        margin: 16px;
+    }
+
+    .celebration-emoji {
+        font-size: 60px;
+    }
+
+    .celebration-text {
+        font-size: var(--font-size-lg);
+    }
+
+    .streak-banner {
+        padding: 10px 16px;
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* iPhone 全面屏 (notch) 额外安全区域 */
+@supports (padding-top: env(safe-area-inset-top)) {
+    .app-header {
+        padding-top: calc(16px + env(safe-area-inset-top));
+    }
+
+    .bottom-nav {
+        padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .app-main {
+        padding-bottom: calc(100px + env(safe-area-inset-bottom));
+    }
+}
+
+/* iPhone SE / 小屏设备 */
+@media (max-width: 375px) {
+    .timer-minutes,
+    .timer-seconds {
+        font-size: 32px;
+    }
+
+    .timer-ring-container {
+        width: min(55vw, 170px);
+        height: min(55vw, 170px);
+    }
+
+    .control-btn {
+        padding: 12px 16px;
+        min-width: 75px;
+    }
+
+    .control-btn.primary {
+        min-width: 90px;
+    }
+
+    .control-btn .btn-icon {
+        font-size: 22px;
+    }
+
+    .cd-minutes,
+    .cd-seconds {
+        font-size: 40px;
+    }
+
+    .mode-btn {
+        padding: 8px 12px;
+        font-size: var(--font-size-xs);
     }
 }
